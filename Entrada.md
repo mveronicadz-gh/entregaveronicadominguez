@@ -22,3 +22,7 @@ Deadline: A partir del turno de la tarde de hoy, como medida inmediata.
 Aprendizajes
 Establecer pruebas con casos reales antes de habilitar nuevas funcionalidades en el sistema interno.
 Verificar que los datos relevantes estén completos antes de aplicar el cambio rápido de estado para prevenir posibles automatizaciones erróneas.
+
+
+Reflexión del feedback radicalmente sincero:
+Cuando se detectó el problema, mi primer impulso fue buscar culpables en lugar de enfocarse en una solución. Antes de hablar, me tomé un momento para calmarme y respirar, para comunicar con cuidado. Luego me comuniqué con la encargada de logística y le dije: “La propuesta de cambio rápido de estado y la automatización de mensajes al cliente me parece excelente para mejorar los tiempos de trabajo. Dicho esto, en este incidente vimos que si el sistema se libera directamente sin validación, puede generar inconsistencias y reclamos. Para la próxima, el equipo de logística debería realizar pruebas con casos reales (incluyendo pedidos con datos incompletos) antes de habilitar la funcionalidad, y asegurarnos de que haya validaciones que bloqueen o requieran completar datos críticos antes de que el sistema comunique “En ruta”’. Esto evitó que la conversación se sintiera como una acusación y permitió orientar el diálogo hacia acciones concretas: contención operativa inmediata y mejora del sistema con filtros y validaciones. 
