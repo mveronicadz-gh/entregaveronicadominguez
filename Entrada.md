@@ -1,0 +1,24 @@
+Contexto: Trabajo en una empresa de logística chica que gestiona envíos y/o retiros. El equipo usa una plataforma interna para administrar órdenes de envío: cargar datos, actualizar estados y registrar confirmaciones (por ejemplo, recolección/entrega con información mínima requerida). Para agilizar el trabajo, hace poco incorporaron una funcionalidad de “cambio rápido de estado” y notificaciones automáticas al cliente según el estado del pedido.
+Problema: El martes por la mañana, el equipo actualizó el estado de varias órdenes a “En ruta” mediante el cambio rápido de estado. Sin embargo, en algunos casos quedaron campos de confirmación incompletos (por ejemplo, información necesaria para acreditar que el envío efectivamente fue retirado o parametrizaciones mínimas del comprobante). Como la automatización no bloqueó la transición cuando faltaban datos críticos, el sistema generó mensajes automáticos al cliente comunicando que su envío “ya estaba en camino”, pero la orden internamente no estaba confirmada de forma consistente. Al día siguiente, los clientes comenzaron a reclamar porque el envío “no se había movido” como indicaba la notificación. El equipo tuvo que revisar historial, corregir estados, repetir confirmaciones con el transportista y explicar demoras, generando retrabajo.
+Acciones 
+Acciones— Paso 1: evidencia (post mortem constructivo): Al revisar el sistema se observó que la nueva funcionalidad ejecutó el cambio rápido de estado sin validar que los pedidos tuvieran completos los campos críticos de confirmación. Como consecuencia, el sistema envió notificaciones automatizadas al cliente con información que no coincidía con el estado real del envío, lo que derivó en reclamos por correo y teléfono.
+Acciones — Paso 2: timeline del incidente (post mortem constructivo)
+Martes 8 h: Se actualizó el estado de varias órdenes a “En ruta” mediante la funcionalidad de cambio rápido de estado. Sin embargo, en algunos pedidos quedaron campos de confirmación incompletos. El sistema emitió notificaciones automáticas al cliente informando que el envío “ya estaba en camino”, aunque internamente la orden no estaba confirmada de forma consistente.
+Miércoles: Los clientes comenzaron a reclamar porque el envío “no se había movido” como indicaba la notificación.
+Miércoles: El equipo tuvo que revisar historial, corregir estados, repetir confirmaciones con el transportista y explicar demoras, generando retrabajo.
+Acciones — Paso 3: hipótesis (post mortem constructivo)
+Hipotesis A:El sistema no contaba con filtros para el cambio de estado cuando faltaban datos críticos. Probabilidad: ALTA. Impacto: ALTO
+Hipotesis B:No se realizó seguimiento de la nueva funcionalidad tras implementarla. Probabilidad: Media. Impacto: ALTO. 
+Acciones — Paso 4: priorización (post mortem constructivo): Hipótesis prioritaria la A. La causa raíz más probable es que el sistema no contaba con un filtro para realizar cambios de estado rápido cuando el pedido estaba con datos incompletos. Esto generó un impacto alto: por un lado, los clientes recibieron mensajes que sugerían que el envío ya se había movido, pero al consultar se evidenció que no había ocurrido el movimiento correspondiente, generando inseguridad e incertidumbre. Por otro lado, el equipo tuvo que realizar retrabajo operativo (revisar historial, corregir estados de manera manual, repetir confirmaciones con el transportista y reprogramar la comunicación). 
+Acciones — Paso 5: plan de acción (post mortem constructivo)
+Acción: Antes de implementar una nueva funcionalidad, realizar una prueba (incluyendo pedidos con datos incompletos). Responsable: Jefa de logística. Estado: Pendiente.
+Acción: Implementar filtros que bloqueen el cambio a “en ruta” si faltan datos requeridos importantes o que obligue completar esos datos antes de continuar. Responsable: Desarrollador. Estado: En proceso.
+Acción: Verificar que los campos críticos estén completos antes de utilizar el cambio rápido hacia “En ruta”. Responsable: Empleado de turno. Estado: En proceso.
+Acciones — Paso 6: cómo se avisó al equipo:
+Contexto: Detectamos que la funcionalidad de cambio rápido de estado permitió marcar pedidos como “En ruta” aunque tenían campos de confirmación incompletos. Como resultado, el sistema envió notificaciones automáticas al cliente indicando que el envío viajaba, mientras que la orden no estaba confirmada de forma consistente.
+Impacto: Hasta que quede la validación automática, se debe verificar manualmente que los campos críticos de confirmación estén completos antes de usar el cambio rápido a “En ruta”.
+Deadline: A partir del turno de la tarde de hoy, como medida inmediata. 
+
+Aprendizajes
+Establecer pruebas con casos reales antes de habilitar nuevas funcionalidades en el sistema interno.
+Verificar que los datos relevantes estén completos antes de aplicar el cambio rápido de estado para prevenir posibles automatizaciones erróneas.
